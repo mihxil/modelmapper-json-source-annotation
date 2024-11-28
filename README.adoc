@@ -3,7 +3,7 @@
 
 image:https://github.com/mihxil/modelmapper-json-source-annotation/actions/workflows/maven.yml/badge.svg?[Build Status,link=https://github.com/mihxil/modelmapper-json-source-annotation/actions/workflows/maven.yml]
 image:https://codecov.io/gh/mihxil/modelmapper-json-source-annotation/branch/main/graph/badge.svg[codecov,link=https://codecov.io/gh/mihxil/modelmapper-json-source-annotation]
-image:https://img.shields.io/nexus/s/https/oss.sonatype.org/org.meeuw.modelmapper/json-source-annotation.svg[snapshots,link=https://oss.sonatype.org/content/repositories/snapshots/org/meeuw/modelmapper]
+image:https://img.shields.io/nexus/s/https/oss.sonatype.org/org.meeuw.modelmapper/json-source-annotation.svg[snapshots,link=https://oss.sonatype.org/content/repositories/snapshots/org/meeuw/modelmapper/]
 
 
 At https://beeldengeluid.nl[Source & Vision] we like to have object which store a lot of information in json fields, which then during mapping are converted to actual fields.
