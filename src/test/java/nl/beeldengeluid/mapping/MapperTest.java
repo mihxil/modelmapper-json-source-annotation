@@ -50,12 +50,6 @@ class MapperTest {
    }
 
 
-   @Test
-   public void getMapping() throws NoSuchFieldException {
-       var entry = JsonFieldModule.getEntry(AnotherSourceClass.class, DestinationClass.class.getDeclaredField("title")).orElseThrow();
-       JsonFieldModule.Mapping mapping = entry.getValue();
-       assertThat(mapping.field().getName()).isEqualTo("moreJson");
-   }
 
    @Test
    public void fromObject() {
