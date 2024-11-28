@@ -3,7 +3,7 @@
   <groupId>org.meeuw</groupId>
   <artifactId>mapping-annotations</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +18,7 @@
     <connection>scm:git:${project.scm.url}.git</connection>
     <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
     <url>https://github.com/mihxil/mapping-annotations</url>
-    <tag>HEAD</tag>
+    <tag>mapping-annotations-0.1</tag>
   </scm>
 
 
