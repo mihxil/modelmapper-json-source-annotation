@@ -4,4 +4,6 @@ package nl.beeldengeluid.mapping;
 public class SourceClass {
 
     byte[] json;
+
+    String anotherJson;
 }

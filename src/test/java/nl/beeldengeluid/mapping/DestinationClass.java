@@ -12,4 +12,9 @@ public class DestinationClass {
     
     @Source(field = "json", pointer ="/title")
     String title;
+
+
+    @Source(field = "anotherJson", pointer ="/a/b/value")
+    String description;
+
 }

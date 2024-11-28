@@ -9,4 +9,6 @@ public @interface Source {
     String pointer() default "";
     
     String field() default "";
+
+    String defaultValue() default "";
 }

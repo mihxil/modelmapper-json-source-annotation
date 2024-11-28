@@ -122,13 +122,25 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
             try {
                 Mapping m = mapping.get(memberName);
                 Object json = m.field().get(source);
+                if (json == null) {
+                    json = m.source().defaultValue();
+                    if ("".equals(json)) {
+                        json = null;
+                    }
+                    if (json == null) {
+                        return null;
+                    }
+                }
                 JsonNode node;
-                if (json instanceof byte[] bytes){
+
+                if (json instanceof byte[] bytes) {
                     node = MAPPER.readTree(bytes);
+                } else if (json instanceof String string){
+                    node = MAPPER.readTree(string);
                 } else if (json instanceof JsonNode n) {
                     node = n;
                 } else {
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("%s could not be mapped to json %s -> %s".formatted(memberName , m, json));
                 }
                 return node.at(m.source().pointer()).asText();
             } catch (IllegalAccessException | IOException e) {
