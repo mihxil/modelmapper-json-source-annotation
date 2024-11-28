@@ -4,3 +4,45 @@
 image:https://github.com/mihxil/mapping-annotations/actions/workflows/maven.yml/badge.svg?[Build Status,link=https://github.com/mihxil/mapping-annotations/actions/workflows/maven.yml]
 image:https://codecov.io/gh/mihxil/mapping-annotations/branch/main/graph/badge.svg[codecov,link=https://codecov.io/gh/mihxil/mapping-annotations]
 image:https://img.shields.io/nexus/s/https/oss.sonatype.org/org.meeuw/mapping-annotations.svg[snapshots,link=https://oss.sonatype.org/content/repositories/snapshots/org/meeuw/]
+
+
+At https://beeldengeluid.nl[Source & Vision] we like to have object which store a lot of information in json fields, which then during mapping are converted to actual fields.
+
+== Usage
+
+The idea is to annotate a field in the destination object, like so:
+[source, java]
+----
+    @Source(field = "json", pointer ="/title")
+    String title;
+----
+Which sais that the field 'title' must be filled from the 'title' field in the field 'json' of the given SourceClass.
+
+It can then be used like this:
+[source, java]
+----
+  SourceClass source = new SourceClass();
+  source.setJson("""
+       {'title': 'foobar'}
+       """.getBytes(StandardCharsets.UTF_8));
+
+ ModelMapper mapper = new ModelMapper();
+ mapper.registerModule(JsonFieldModule.of(DestinationClass.class));
+
+ DestinationClass destination = mapper.map(source, DestinationClass.class);
+ assert "foobar".equals(destination.getTitle());
+----
+
+
+== Versions
+
+
+|===
+|version | date | requirements | remarks
+
+| 0.1
+| 2024-11
+| java >= 17
+| initial version
+
+|===
