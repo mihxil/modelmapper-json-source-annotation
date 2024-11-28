@@ -3,7 +3,7 @@
   <groupId>org.meeuw</groupId>
   <artifactId>mapping-annotations</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <description>A ModelMapper module to add support for picking up values from json fields</description>
 
   <properties>
@@ -19,7 +19,7 @@
     <connection>scm:git:${project.scm.url}.git</connection>
     <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
     <url>https://github.com/mihxil/mapping-annotations</url>
-    <tag>HEAD</tag>
+    <tag>0.1</tag>
   </scm>
 
 
