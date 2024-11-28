@@ -3,7 +3,7 @@
   <groupId>org.meeuw</groupId>
   <artifactId>mapping-annotations</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.1-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,13 +65,13 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.34</version>
+      <version>1.18.36</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>nl.vpro.shared</groupId>
       <artifactId>vpro-shared-log4j2</artifactId>
-      <version>5.3.2</version>
+      <version>5.3.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -82,7 +82,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.18.1</version>
+      <version>2.18.2</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -105,9 +105,37 @@
             <annotationProcessorPath>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
-              <version>1.18.34</version>
+              <version>1.18.36</version>
             </annotationProcessorPath>
           </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.11.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <failOnError>false</failOnError>
+          <show>public</show>
         </configuration>
       </plugin>
       <plugin>
@@ -145,6 +173,14 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <branchName>${project.version}</branchName>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
     </plugins>
 
 </build>
@@ -166,7 +202,6 @@
       <id>deploy</id>
       <build>
         <plugins>
-
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -190,34 +225,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.3.0</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.6.3</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <failOnError>false</failOnError>
-              <show>public</show>
-            </configuration>
           </plugin>
         </plugins>
       </build>
