@@ -10,7 +10,11 @@ import nl.beeldengeluid.mapping.annotations.Sources;
 
 class Util {
 
-     static final ObjectMapper MAPPER = new ObjectMapper();
+    private Util() {
+        // no instances allowed
+    }
+
+    static final ObjectMapper MAPPER = new ObjectMapper();
     static {
         MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         MAPPER.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);

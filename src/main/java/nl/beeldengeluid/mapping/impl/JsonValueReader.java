@@ -82,13 +82,15 @@ public class JsonValueReader implements ValueReader<Object> {
         return mapping.computeIfAbsent(sourceClass, clazz -> {
             Map<String, Mapping> newMap = new HashMap<>();
             if (superMapping != null){
-                newMap.putAll(superMapping);;
+                newMap.putAll(superMapping);
             }
             Arrays.stream(this.destinationClass.getDeclaredFields())
-                .map(f -> {
-                    return Util.getEntry(sourceClass, f).orElse(null);
-                }).filter(Objects::nonNull)
-                .forEach(e -> newMap.put(e.getKey(), e.getValue()));
+                .map(f ->
+                    Util.getEntry(sourceClass, f).orElse(null)
+                ).filter(Objects::nonNull)
+                .forEach(e ->
+                    newMap.put(e.getKey(), e.getValue())
+                );
             return Collections.unmodifiableMap(newMap);
         });
     }
