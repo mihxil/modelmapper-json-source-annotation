@@ -31,10 +31,8 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
           gpg-passphrase: GPG_SECRET_KEY_PASSPHRASE
       - name: Build and deploy with Maven
-        container: ghcr.io/vpro/maven:18
-        run: |
-          which yq
-          ls /proc/docker
+
+        run: |         
           mvn -Pdeploy -B test deploy
         env:
           SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
