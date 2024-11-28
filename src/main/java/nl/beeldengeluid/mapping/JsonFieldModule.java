@@ -1,9 +1,15 @@
+/*
+ * Copyright (C) 2024 Licensed under the Apache License, Version 2.0
+ */
 package nl.beeldengeluid.mapping;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.beeldengeluid.mapping.impl.JsonValueReader;
 import org.modelmapper.ModelMapper;
 
+/**
+ * ModelMapper module that provides a reader for fields annotated with {@link nl.beeldengeluid.mapping.annotations.Source}
+ */
 
 @Slf4j
 public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Module {

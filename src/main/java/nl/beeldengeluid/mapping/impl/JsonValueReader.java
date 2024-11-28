@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2024 Licensed under the Apache License, Version 2.0
+ */
 package nl.beeldengeluid.mapping.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,13 +32,7 @@ public class JsonValueReader implements ValueReader<Object> {
         Mapping m = getMapping(source.getClass()).get(memberName);
         Object json = m.field().get(source);
         if (json == null) {
-            json = m.source().defaultValue();
-            if ("".equals(json)) {
-                json = null;
-            }
-            if (json == null) {
-                return null;
-            }
+            return null;
         }
         JsonNode node;
 
