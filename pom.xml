@@ -3,7 +3,7 @@
   <groupId>org.meeuw.modelmapper</groupId>
   <artifactId>json-source-annotation</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <name>modelmapper-json-source-annotation</name>
   <description>A ModelMapper module to add support for picking up values from json fields</description>
 
@@ -20,7 +20,7 @@
     <connection>scm:git:${project.scm.url}.git</connection>
     <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
     <url>https://github.com/mihxil/modelmapper-json-source-annotation</url>
-    <tag>0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
 
