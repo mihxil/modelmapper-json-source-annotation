@@ -11,7 +11,8 @@ on:
 
 jobs:
   build:
-    runs-on: ghcr.io/vpro/maven:18
+    runs-on: ubuntu-latest
+    container: ghcr.io/vpro/maven:18
     env:
       MAVEN_OPTS: -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
     steps:
