@@ -33,6 +33,8 @@ jobs:
           gpg-passphrase: GPG_SECRET_KEY_PASSPHRASE
       - name: Build and deploy with Maven
         run: |
+          which yq
+          ls /proc/docker
           mvn -B test deploy
         env:
           SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
