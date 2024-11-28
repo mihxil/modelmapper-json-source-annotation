@@ -1,9 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.meeuw</groupId>
-  <artifactId>mapping-annotations</artifactId>
+  <groupId>org.meeuw.modelmapper</groupId>
+  <artifactId>json-source-annotation</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.1-SNAPSHOT</version>
+  <name>modelmapper-json-source-annotation</name>
   <description>A ModelMapper module to add support for picking up values from json fields</description>
 
   <properties>
