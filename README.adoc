@@ -1,1 +1,6 @@
 = Mapping json values with ModelMapper
+
+
+image:https://github.com/mihxil/mapping-annotations/actions/workflows/maven.yml/badge.svg?[Build Status,link=https://github.com/mihxil/mapping-annotations/actions/workflows/maven.yml]
+image:https://codecov.io/gh/mihxil/mapping-annotations/branch/main/graph/badge.svg[codecov,link=https://codecov.io/gh/mihxil/mapping-annotations]
+image:https://img.shields.io/nexus/s/https/oss.sonatype.org/org.meeuw/mapping-annotations.svg[snapshots,link=https://oss.sonatype.org/content/repositories/snapshots/org/meeuw/]
