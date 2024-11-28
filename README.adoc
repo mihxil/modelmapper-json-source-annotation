@@ -8,6 +8,8 @@ image:https://img.shields.io/nexus/s/https/oss.sonatype.org/org.meeuw/mapping-an
 
 At https://beeldengeluid.nl[Source & Vision] we like to have object which store a lot of information in json fields, which then during mapping are converted to actual fields.
 
+This is a module to add support for that in  https://modelmapper.org/[model mapper]
+
 == Usage
 
 The idea is to annotate a field in the destination object, like so:
