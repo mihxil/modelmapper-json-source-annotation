@@ -5,7 +5,11 @@ import nl.beeldengeluid.mapping.annotations.Source;
 
 @Data
 public class DestinationClass {
+
+    public DestinationClass() {
+
+    }
     
-    @Source(field = "json", path="title")
+    @Source(field = "json", pointer ="/title")
     String title;
 }
