@@ -93,46 +93,61 @@
   </dependencies>
   <build>
     <defaultGoal>install</defaultGoal>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.13.0</version>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <annotationProcessorPaths>
+            <annotationProcessorPath>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>1.18.34</version>
+            </annotationProcessorPath>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+          <useModulePath>false</useModulePath>
+          <systemPropertyVariables>
+            <projectArtifactId>${project.artifactId}</projectArtifactId>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.12</version>
+        <executions>
+          <execution>
+            <id>agent</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
             <configuration>
-                <source>${maven.compiler.source}</source>
-                <target>${maven.compiler.target}</target>
-                <annotationProcessorPaths>
-                    <annotationProcessorPath>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>1.18.34</version>
-                    </annotationProcessorPath>
-                </annotationProcessorPaths>
+              <append>true</append>
             </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.2</version>
-          <configuration>
-            <testFailureIgnore>true</testFailureIgnore>
-            <useModulePath>false</useModulePath>
-            <systemPropertyVariables>
-              <projectArtifactId>${project.artifactId}</projectArtifactId>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.12</version>
-          <configuration>
-            <append>true</append>
-          </configuration>
-        </plugin>
-      </plugins>
-       </pluginManagement>
-  </build>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+</build>
 
 
   <distributionManagement>

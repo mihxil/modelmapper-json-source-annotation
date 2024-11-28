@@ -41,14 +41,17 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           GPG_SECRET_KEY_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSPHRASE }}
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
-          files: report-aggregation/target/site/jacoco-aggregate/jacoco.xml
+          files: target/site/jacoco/jacoco.xml
           verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: mihxil/mapping-annotations
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.18.0
         if: always()
         with:
           files: "target/surefire-reports/*.xml"
+
+
+
