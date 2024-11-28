@@ -14,10 +14,10 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
         this.reader = new JsonValueReader(sourceClass, destinationClass);
     }
 
-    public static JsonFieldModule<Object, Object> instance() {
+  /*  public static JsonFieldModule<Object, Object> instance() {
         // For this to work we will need annotation scanning library.
         return new JsonFieldModule<>(Object.class, Object.class);
-    }
+    }*/
 
     public static <DESTINATION> JsonFieldModule<Object, DESTINATION> of(Class<DESTINATION> destinationClass) {
         return new JsonFieldModule<>(Object.class, destinationClass);

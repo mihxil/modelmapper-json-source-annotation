@@ -1,8 +1,8 @@
 package nl.beeldengeluid.mapping.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
 import java.util.*;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import static nl.beeldengeluid.mapping.impl.Util.MAPPER;
 import org.modelmapper.spi.ValueReader;
@@ -24,36 +24,35 @@ public class JsonValueReader implements ValueReader<Object> {
     }
 
     @Override
+    @SneakyThrows
     public Object get(Object source, String memberName) {
-        try {
-            Mapping m = getMapping(source.getClass()).get(memberName);
-            Object json = m.field().get(source);
+        Mapping m = getMapping(source.getClass()).get(memberName);
+        Object json = m.field().get(source);
+        if (json == null) {
+            json = m.source().defaultValue();
+            if ("".equals(json)) {
+                json = null;
+            }
             if (json == null) {
-                json = m.source().defaultValue();
-                if ("".equals(json)) {
-                    json = null;
-                }
-                if (json == null) {
-                    return null;
-                }
+                return null;
             }
-            JsonNode node;
-
-            if (json instanceof byte[] bytes) {
-                node = MAPPER.readTree(bytes);
-            } else if (json instanceof String string){
-                node = MAPPER.readTree(string);
-            } else if (json instanceof JsonNode n) {
-                node = n;
-            } else {
-                throw new IllegalStateException("%s could not be mapped to json %s -> %s".formatted(memberName , m, json));
-            }
-            return node.at(m.source().pointer()).asText();
-        } catch (IllegalAccessException | IOException e) {
-            log.warn(e.getMessage(), e);
         }
-        return null;
+        JsonNode node;
+
+        if (json instanceof byte[] bytes) {
+            node = MAPPER.readTree(bytes);
+        } else if (json instanceof String string){
+            node = MAPPER.readTree(string);
+        } else if (json instanceof JsonNode n) {
+            node = n;
+        } else {
+            throw new IllegalStateException("%s could not be mapped to json %s -> %s".formatted(memberName , m, json));
+        }
+        JsonNode jsonNode = node.at(m.source().pointer());
+
+        return Util.unwrapJson(jsonNode);
     }
+
 
     @Override
     public Member<Object> getMember(Object source, String memberName) {

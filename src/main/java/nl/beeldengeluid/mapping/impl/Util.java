@@ -1,6 +1,7 @@
 package nl.beeldengeluid.mapping.impl;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -50,6 +51,40 @@ class Util {
         } else {
             return Optional.empty();
         }
+    }
+
+    public static Object unwrapJson(JsonNode jsonNode) {
+        if (jsonNode.isNull()) {
+            return null;
+        }
+        if (jsonNode.isLong()) {
+            return jsonNode.asLong();
+        }
+        if (jsonNode.isInt()) {
+            return jsonNode.asInt();
+        }
+        if (jsonNode.isBoolean()) {
+            return jsonNode.asBoolean();
+        }
+        if (jsonNode.isTextual()) {
+            return jsonNode.asText();
+        }
+        if (jsonNode.isDouble()) {
+            return jsonNode.asDouble();
+        }
+        if (jsonNode.isFloat()) {
+            return jsonNode.asDouble();
+        }
+        if (jsonNode.isArray()) {
+            List<Object> result = new ArrayList<>();
+            jsonNode.forEach(e -> {
+                result.add(unwrapJson(e));
+            });
+            return result;
+        }
+        // Not complete, I suppose
+        return jsonNode.asText();
+
     }
 
 
