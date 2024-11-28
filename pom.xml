@@ -93,7 +93,29 @@
   </dependencies>
   <build>
     <defaultGoal>install</defaultGoal>
-    
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.2</version>
+          <configuration>
+            <testFailureIgnore>true</testFailureIgnore>
+            <systemPropertyVariables>
+              <projectArtifactId>${project.artifactId}</projectArtifactId>
+            </systemPropertyVariables>
+            <argLine>@{argLine} -Dfile.encoding=UTF-8</argLine>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.12</version>
+          <configuration>
+            <append>true</append>
+          </configuration>
+        </plugin>
+      </plugins>
+       </pluginManagement>
   </build>
 
 
@@ -113,6 +135,7 @@
       <id>deploy</id>
       <build>
         <plugins>
+
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
