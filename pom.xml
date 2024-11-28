@@ -4,6 +4,7 @@
   <artifactId>mapping-annotations</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
   <version>0.1-SNAPSHOT</version>
+  <description>A ModelMapper module to add support for picking up values from json fields</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
