@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.beeldengeluid.mapping.annotations.Source;
+import nl.beeldengeluid.mapping.annotations.Sources;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.ValueReader;
 
@@ -20,31 +20,24 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
     private final Class<SOURCE> sourceClass;
     private final Class<DESTINATION> destinationClass;
 
-    private final Map<String, Mapping> mapping;
+    private final Map<Class<?>, Map<String, Mapping>> mapping = new HashMap<>();
 
-    
-
-    public JsonFieldModule(Class<SOURCE> sourceClass, Class<DESTINATION> destinationClass) {
+    private JsonFieldModule(Class<SOURCE> sourceClass, Class<DESTINATION> destinationClass) {
         this.sourceClass = sourceClass;
         this.destinationClass = destinationClass;
-        this.mapping = Arrays.stream(destinationClass.getDeclaredFields())
-                .map(f -> {
+    }
 
-                    Source s = f.getAnnotation(Source.class);
-                    if (s == null) {
-                        return null;
-                    }
-                    try {
-                        Field sourceField = sourceClass.getDeclaredField(s.field());
-                        sourceField.setAccessible(true);
-                        return s == null ? null :
-                            new AbstractMap.SimpleEntry<>(f.getName(), new Mapping(s, sourceField));
-                    } catch (NoSuchFieldException e) {
-                        log.warn(e.getMessage(), e);
-                        return null;
-                    }
-                }).filter(Objects::nonNull)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public static JsonFieldModule<Object, Object> instance() {
+        // For this to work we will need annotation scanning library.
+        return new JsonFieldModule<>(Object.class, Object.class);
+    }
+
+    public static <DESTINATION> JsonFieldModule<Object, DESTINATION> of(Class<DESTINATION> destinationClass) {
+        return new JsonFieldModule<>(Object.class, destinationClass);
+    }
+
+    public static <SOURCE, DESTINATION> JsonFieldModule<SOURCE, DESTINATION> of(Class<SOURCE> sourceClass, Class<DESTINATION> destinationClass) {
+        return new JsonFieldModule<>(sourceClass, destinationClass);
     }
 
     @Override
@@ -58,7 +51,7 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
         @Override
         public Object get(Object source, String memberName) {
             if (sourceClass.isInstance(source)) {
-                Mapping s = mapping.get(memberName);
+                Mapping s = getMapping(source.getClass()).get(memberName);
                 if (s != null) {
                     try {
                         return s.field().get(source);
@@ -73,7 +66,7 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
         @Override
         public Member<Object> getMember(Object source, String memberName) {
             if (sourceClass.isInstance(source)) {
-                Mapping s = mapping.get(memberName);
+                Mapping s = getMapping(source.getClass()).get(memberName);
                 if (s != null) {
 
                     return new JsonMember(sourceClass);
@@ -84,9 +77,66 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
 
         @Override
         public Collection<String> memberNames(Object source) {
-            return mapping.keySet();
+            return getMapping(source.getClass()).keySet();
         }
 
+    }
+
+    Map<String, Mapping> getMapping(Class<?> sourceClass) {
+        final Map<String, Mapping> superMapping;
+        Class<?> superClass = sourceClass.getSuperclass();
+        if (superClass != null && this.sourceClass.isAssignableFrom(superClass)) {
+            superMapping = getMapping(superClass);
+        } else {
+            superMapping = null;
+        }
+        return mapping.computeIfAbsent(sourceClass, clazz -> {
+            Map<String, Mapping> newMap = new HashMap<>();
+            if (superMapping != null){
+                newMap.putAll(superMapping);;
+            }
+            Arrays.stream(this.destinationClass.getDeclaredFields())
+                .map(f -> {
+                    return getEntry(sourceClass, f).orElse(null);
+                }).filter(Objects::nonNull)
+                .forEach(e -> newMap.put(e.getKey(), e.getValue()));
+            return Collections.unmodifiableMap(newMap);
+        });
+    }
+
+    static Optional<Map.Entry<String, Mapping>> getEntry(Class<?> sourceClass, Field f) {
+        Source s = null;
+        {
+
+            Sources sources = f.getAnnotation(Sources.class);
+            if (sources != null) {
+                for (Source proposal : sources.value()) {
+                    if (proposal.sourceClass().isAssignableFrom(sourceClass)) {
+                        if (s == null) {
+                            s = proposal;
+                        } else {
+                            if (s.sourceClass().isAssignableFrom(proposal.sourceClass())) {
+                                // this means proposal is more specific
+                                s = proposal;
+                            }
+                        }
+                    }
+                }
+            } else {
+                s = f.getAnnotation(Source.class);
+            }
+        }
+        if (s != null) {
+            try {
+                Field sourceField = sourceClass.getDeclaredField(s.field());
+                sourceField.setAccessible(true);
+                return Optional.of(new AbstractMap.SimpleEntry<>(f.getName(), new Mapping(s, sourceField)));
+            } catch (NoSuchFieldException e) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
     }
     
     @SneakyThrows
@@ -120,7 +170,7 @@ public class JsonFieldModule<SOURCE, DESTINATION> implements org.modelmapper.Mod
         @Override
         public Object get(Object source, String memberName) {
             try {
-                Mapping m = mapping.get(memberName);
+                Mapping m = getMapping(source.getClass()).get(memberName);
                 Object json = m.field().get(source);
                 if (json == null) {
                     json = m.source().defaultValue();

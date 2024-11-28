@@ -10,7 +10,8 @@ public class DestinationClass {
 
     }
     
-    @Source(field = "json", pointer ="/title")
+    @Source(field = "moreJson", pointer ="/title")
+    @Source(field = "json", pointer ="/title", sourceClass = SourceClass.class)
     String title;
 
 

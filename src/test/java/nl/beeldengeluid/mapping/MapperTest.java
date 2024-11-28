@@ -3,6 +3,7 @@ package nl.beeldengeluid.mapping;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.log4j.Log4j2;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
@@ -16,11 +17,9 @@ class MapperTest {
        {'title': 'foobar'}
        """.getBytes(StandardCharsets.UTF_8));
 
-       ModelMapper mapper = new ModelMapper(); 
-         mapper.registerModule(
-             new JsonFieldModule<>(SourceClass.class, DestinationClass.class)
-         );
-       
+       ModelMapper mapper = new ModelMapper();
+       mapper.registerModule(JsonFieldModule.of(SourceClass.class, DestinationClass.class));
+
        DestinationClass destination = mapper.map(source, DestinationClass.class);
 
        log.info("{}", destination);
@@ -42,15 +41,56 @@ class MapperTest {
        """);
 
        ModelMapper mapper = new ModelMapper();
-         mapper.registerModule(
-             new JsonFieldModule<>(SourceClass.class, DestinationClass.class)
-         );
+       mapper.registerModule(JsonFieldModule.of(SourceClass.class, DestinationClass.class));
 
        DestinationClass destination = mapper.map(source, DestinationClass.class);
 
        log.info("{}", destination);
        assertThat(destination.getDescription()).isEqualTo("abracadabra");
-
    }
+
+
+   @Test
+   public void getMapping() throws NoSuchFieldException {
+       var entry = JsonFieldModule.getEntry(AnotherSourceClass.class, DestinationClass.class.getDeclaredField("title")).orElseThrow();
+       JsonFieldModule.Mapping mapping = entry.getValue();
+       assertThat(mapping.field().getName()).isEqualTo("moreJson");
+   }
+
+   @Test
+   public void fromObject() {
+       AnotherSourceClass source = new AnotherSourceClass();
+       source.setMoreJson("""
+         { title: "abracadabra"
+         }
+       """.getBytes(StandardCharsets.UTF_8));
+
+       ModelMapper mapper = new ModelMapper();
+       mapper.registerModule(JsonFieldModule.of(DestinationClass.class));
+
+       DestinationClass destination = mapper.map(source, DestinationClass.class);
+
+       log.info("{}", destination);
+       assertThat(destination.getTitle()).isEqualTo("abracadabra");
+   }
+
+    @Test
+    @Disabled
+    public void withInstance() {
+       AnotherSourceClass source = new AnotherSourceClass();
+       source.setMoreJson("""
+         { title: "abracadabra"
+         }
+       """.getBytes(StandardCharsets.UTF_8));
+
+       ModelMapper mapper = new ModelMapper();
+       mapper.registerModule(JsonFieldModule.instance());
+
+       DestinationClass destination = mapper.map(source, DestinationClass.class);
+
+       log.info("{}", destination);
+       assertThat(destination.getTitle()).isEqualTo("abracadabra");
+   }
+
 
 }
