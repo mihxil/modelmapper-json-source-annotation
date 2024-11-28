@@ -19,10 +19,10 @@ jobs:
         uses: styfle/cancel-workflow-action@0.12.1
         continue-on-error: true  # for act
       - uses: actions/checkout@v4.2.2
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
           cache: 'maven'
           server-id: ossrh
@@ -42,8 +42,7 @@ jobs:
           files: report-aggregation/target/site/jacoco-aggregate/jacoco.xml
           verbose: true
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@v2.18
         if: always()
         with:
-          name: Tests results
           files: "**/target/surefire-reports/*.xml"
