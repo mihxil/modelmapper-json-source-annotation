@@ -1,9 +1,10 @@
 package nl.beeldengeluid.mapping;
 
-import lombok.Data;
-import nl.beeldengeluid.mapping.annotations.Source;
+import lombok.Getter;
+import lombok.Setter;
+import org.meeuw.mapping.annotations.Source;
 
-@Data
+@Getter@Setter
 public class DestinationClass {
 
     public DestinationClass() {

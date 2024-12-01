@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.meeuw.modelmapper</groupId>
+  <groupId>org.meeuw.mapping</groupId>
   <artifactId>json-source-annotation</artifactId>
   <url>https://github.com/mihxil/mapping-annotations</url>
   <version>0.2-SNAPSHOT</version>
@@ -62,7 +62,7 @@
     <dependency>
       <groupId>org.modelmapper</groupId>
       <artifactId>modelmapper</artifactId>
-      <version>3.2.1</version>
+      <version>3.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -91,6 +91,12 @@
       <artifactId>assertj-core</artifactId>
       <version>3.26.3</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.meeuw.mapping</groupId>
+      <artifactId>mapping-annotations</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <build>
@@ -232,5 +238,21 @@
       </build>
     </profile>
   </profiles>
+  <repositories>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/service/local/repositories/releases/content</url>
+    </repository>
+  </repositories>
 
 </project>

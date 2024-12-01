@@ -1,5 +1,6 @@
 package nl.beeldengeluid.mapping;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -7,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.modelmapper.config.Configuration;
 import org.modelmapper.spi.ValueReader;
 
 @Log4j2
@@ -17,6 +20,34 @@ class MapperTest {
     {
         sourceToDest.registerModule(JsonFieldModule.of(SourceClass.class,
             DestinationClass.class));
+    }
+
+     ModelMapper withoutModule = new ModelMapper();
+
+    {
+        withoutModule.getConfiguration().setImplicitMappingEnabled(false);
+        withoutModule.getConfiguration().setAmbiguityIgnored(true);
+        withoutModule.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+
+
+        TypeMap<AnotherSourceClass, DestinationClass> typeMap = withoutModule.createTypeMap(AnotherSourceClass.class,
+            DestinationClass.class)
+        .addMappings((mapper) -> {
+                mapper.map(
+                    MapperTest::getTitle,
+                    DestinationClass::setTitle);
+                mapper.skip(DestinationClass::setDescription);
+                mapper.skip(DestinationClass::setTitle);
+            });
+
+
+        //withoutModule.validate();
+
+
+    }
+
+    static String getTitle(AnotherSourceClass s) {
+        return s == null || s.getMoreJson() == null ? null : s.getMoreJson().get("title").asText();
     }
 
 
@@ -34,6 +65,20 @@ class MapperTest {
         log.info("{}", t);
 
     }
+
+    @Test
+    void testMapper2() throws JsonProcessingException {
+        AnotherSourceClass source = new AnotherSourceClass();
+        source.setMoreJson(new ObjectMapper().readTree("""
+              {
+              "title": "bla"
+            }
+            """));
+
+        DestinationClass des = withoutModule.map(source, DestinationClass.class);
+        assertThat(des.getTitle()).isEqualTo("bla");
+    }
+
 
     
    @Test

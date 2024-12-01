@@ -1,10 +1,11 @@
-module nl.beeldengeluid.mapping.annotations {
+module nl.beeldengeluid.mapping.modelmapper {
+    requires static org.slf4j;
+    requires modelmapper;
+    requires org.meeuw.mapping.annotations;
     requires static lombok;
 
-    requires com.fasterxml.jackson.databind;
-    requires modelmapper;
-    requires org.slf4j;
-
-    exports nl.beeldengeluid.mapping.annotations;
     exports nl.beeldengeluid.mapping;
+    opens nl.beeldengeluid.mapping to
+        modelmapper,
+        org.meeuw.mapping.annotations;
 }
