@@ -44,6 +44,11 @@ It can then be used like this:
 |===
 |version | date | requirements | remarks
 
+| 0.2
+| ?
+| 
+| generalized and moved to https://github.com/mihxil/mapping-annotations[other project] all actual mapping based on annotations, and the annotations themselves
+
 | 0.1
 | 2024-11
 | java >= 17
