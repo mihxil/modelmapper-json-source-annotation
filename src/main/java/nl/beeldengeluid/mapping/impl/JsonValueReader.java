@@ -25,7 +25,7 @@ public class JsonValueReader implements ValueReader<Object> {
 
     @Override
     public Object get(Object source, String memberName) {
-        Field destField =  Util.getMappedDestinationProperties(sourceClass, destinationClass).get(memberName);
+        Field destField =  Mapper.getMappedDestinationProperties(sourceClass, destinationClass).get(memberName);
         if(destField != null ) {
             return Mapper.sourceGetter(destField, sourceClass).apply(source).orElse(null);
         } else {
@@ -48,7 +48,7 @@ public class JsonValueReader implements ValueReader<Object> {
 
     @Override
     public Collection<String> memberNames(Object source) {
-        return Util.getMappedDestinationProperties(source.getClass(), destinationClass).keySet();
+        return Mapper.getMappedDestinationProperties(source.getClass(), destinationClass).keySet();
     }
 
      class JsonMember extends  ValueReader.Member<Object>{
