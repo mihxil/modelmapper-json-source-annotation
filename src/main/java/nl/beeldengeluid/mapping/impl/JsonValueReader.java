@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.meeuw.mapping.Mapper;
-import org.meeuw.mapping.impl.Util;
 import org.modelmapper.spi.ValueReader;
 
 @Slf4j
@@ -16,6 +15,7 @@ public class JsonValueReader implements ValueReader<Object> {
     private final Class<?> sourceClass;
     private final Class<?> destinationClass;
 
+    private final Mapper mapper = Mapper.MAPPER;
 
 
     public JsonValueReader(Class<?> sourceClass, Class<?> destinationClass) {
@@ -25,9 +25,9 @@ public class JsonValueReader implements ValueReader<Object> {
 
     @Override
     public Object get(Object source, String memberName) {
-        Field destField =  Mapper.getMappedDestinationProperties(sourceClass, destinationClass).get(memberName);
+        Field destField =  mapper.getMappedDestinationProperties(sourceClass, destinationClass).get(memberName);
         if(destField != null ) {
-            return Mapper.sourceGetter(destField, sourceClass).apply(source).orElse(null);
+            return mapper.sourceGetter(destField, sourceClass).map(f -> f.apply(source)).orElse(null);
         } else {
             return null;
         }
@@ -48,7 +48,7 @@ public class JsonValueReader implements ValueReader<Object> {
 
     @Override
     public Collection<String> memberNames(Object source) {
-        return Mapper.getMappedDestinationProperties(source.getClass(), destinationClass).keySet();
+        return mapper.getMappedDestinationProperties(source.getClass(), destinationClass).keySet();
     }
 
      class JsonMember extends  ValueReader.Member<Object>{
